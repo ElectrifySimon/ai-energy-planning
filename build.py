@@ -64,24 +64,31 @@ def sec(anchor, title=None):
 def endsec():
     B.append("</div></section>")
 
+FIGNO = {"f-clusters": 1, "f-demand": 2, "f-nigeria": 3, "f-leap": 4,
+         "f-solver": 5, "f-pledges": 6, "f-road": 7}
+
 def openfig(fid, title, sub):
+    n = FIGNO[fid]
     B.append(f"""
 <figure class="fig" id="{fid}" data-reveal>
-  <div class="fig-top"><h3>{title}</h3></div>
+  <p class="fig-no">Figure {n:02d}</p>
+  <h3 class="fig-title">{title}</h3>
   <p class="fig-sub">{sub}</p>""")
 
 def closefig(source):
-    B.append(f'  <figcaption>{source}</figcaption>\n</figure>')
+    src = source.replace("Source: ", "").rstrip(".")
+    B.append(f'  <figcaption><span>Source</span>{src}</figcaption>\n</figure>')
 
 def rails(rows, maximum, unit, step, note, future_cls=" future"):
     B.append('<div class="rails">')
     for year, kind, v in rows:
         fill = round(v / maximum * 100, 2)
+        cls = future_cls if kind == "projected" else ""
+        inside = ""
         B.append(f"""
   <div class="rail">
     <div class="rail-year">{year}<small>{kind}</small></div>
-    <div class="track"><span class="fill{future_cls if kind else ''}" style="--fill:{fill}%"></span></div>
-    <div class="rail-v">{v}<small>{unit}</small></div>
+    <div class="track" style="--fill:{fill}%"><span class="fill{cls}"></span><span class="rail-v{inside}" style="--fill:{fill}%">{v}<small>{unit}</small></span></div>
   </div>""")
     B.append("</div>")
     ticks = "".join(f"<span>{t}</span>" for t in step)
@@ -108,7 +115,8 @@ def fig_clusters():
              ("03", "Operational optimisation", "sliders"), ("04", "End-user automation", "home"),
              ("05", "Transparency", "doclines")]
     B.append('<figure class="fig" id="f-clusters" data-reveal>')
-    B.append('<div class="fig-top"><h3>Five value clusters</h3></div>')
+    B.append('<p class="fig-no">Figure 01</p>')
+    B.append('<h3 class="fig-title">Five value clusters</h3>')
     B.append('<p class="fig-sub">IRENA\'s five application areas.</p>')
     B.append('<ol class="band">')
     for n, t, ic in items:
@@ -173,7 +181,8 @@ def fig_pledges():
              ("Respect for national sovereignty", "globe"),
              ("Collective progress towards just energy futures", "bolt")]
     B.append('<figure class="fig" id="f-pledges" data-reveal>')
-    B.append('<div class="fig-top"><h3>Five commitments of the SAGES framework</h3></div>')
+    B.append('<p class="fig-no">Figure 06</p>')
+    B.append('<h3 class="fig-title">Five commitments of the SAGES framework</h3>')
     B.append('<ol class="pledges">')
     for i, (t, ic) in enumerate(items, 1):
         B.append(f'<li>{icon(ic, "ic pledge-ic")}<span class="n">{i:02d}</span><h3>{t}</h3></li>')
@@ -188,7 +197,8 @@ def fig_road():
              ("Skills programmes", "for the planners who run the models", "people"),
              ("Finance guidance", "for development finance", "coins")]
     B.append('<figure class="fig" id="f-road" data-reveal>')
-    B.append('<div class="fig-top"><h3>Six actions for 2026 to 2028</h3></div>')
+    B.append('<p class="fig-no">Figure 07</p>')
+    B.append('<h3 class="fig-title">Six actions for 2026 to 2028</h3>')
     B.append('<p class="fig-sub">All six run at once.</p>')
     B.append('<ol class="acts">')
     for i, (t, d, ic) in enumerate(items, 1):
@@ -234,10 +244,10 @@ p("COP31 put electrification at the centre of the climate agenda. The Presidency
 sec("s2", "What AI changes")
 p("<a href=\"https://www.irena.org/Publications/2026/May/Digitalisation-and-AI-for-transforming-power-systems\" target=\"_blank\" rel=\"noopener\">IRENA's 2026 review</a> of digitalisation and AI in power systems sorts the field into five areas: monitoring, forecasting, operational optimisation, end-user automation and transparency.")
 fig_clusters()
-p("Data centres in the EU used 68 TWh in 2024, a figure the <a href=\"https://build-up.ec.europa.eu/en/resources-and-tools/publications/report-energy-efficiency-data-centres-eu\" target=\"_blank\" rel=\"noopener\">European Commission</a> projects at 114 TWh by 2030, 3.2% of EU electricity demand.")
+p("Data centres in the EU used 68 TWh in 2024, a figure the <a href=\"https://build-up.ec.europa.eu/en/resources-and-tools/publications/report-energy-efficiency-data-centres-eu\" target=\"_blank\" rel=\"noopener\">European Commission</a> projects at 114 TWh by 2030, 3.2% of EU demand.")
 fig_demand()
 p("An <a href=\"https://www.ey.com/content/dam/ey-unified-site/ey-com/en-us/campaigns/energy-resources/documents/ey-ogc-future-of-energy-external-report.pdf\" target=\"_blank\" rel=\"noopener\">EY survey from 2025</a> found 82% of energy executives citing too few skilled workers as an obstacle to new technology.")
-p("In Sierra Leone, a national platform built with <a href=\"https://vida.place/applications/planning\" target=\"_blank\" rel=\"noopener\">VIDA</a> maps settlements, buildings and grid lines, then matches each community to grid extension, a mini-grid or standalone solar. Its list holds 21,075 settlements, and funders, ministries and developers work from one picture instead of separate spreadsheets.")
+p("In Sierra Leone, a national platform built with <a href=\"https://vida.place/applications/planning\" target=\"_blank\" rel=\"noopener\">VIDA</a> maps settlements, buildings and grid lines, then matches each community to grid extension, mini-grid or standalone solar. Its list holds 21,075 settlements, and funders, ministries and developers work from one picture instead of separate spreadsheets.")
 p("Nigeria runs it at scale. The <a href=\"https://nep.rea.gov.ng/\" target=\"_blank\" rel=\"noopener\">Rural Electrification Agency</a> counts 176 mini-grids and 7.8 million reached, against a DARES target of 17.5 million.")
 fig_nigeria()
 p("Almost 80,000 people in 210 countries use <a href=\"https://leap.sei.org/\" target=\"_blank\" rel=\"noopener\">LEAP</a>, from the Stockholm Environment Institute. At least 65 countries have used it for climate pledges. The 2027 version adds AI that lets non-specialists explore a model in plain language.")
@@ -256,11 +266,11 @@ endsec()
 sec("s4", "The delivery route")
 p("The COP Action Agenda carries delivery. The <a href=\"https://climateaction.unfccc.int/assets/documents/121_.pdf\" target=\"_blank\" rel=\"noopener\">LTES Network</a> hosts a Plan to Accelerate Solutions on AI and digitalisation, tied to tripling renewables and doubling efficiency. Actions for 2026 to 2028 cover planning frameworks, a knowledge platform, connection rules, data standards, skills and finance.")
 fig_road()
-p("IRENA also supported the <a href=\"https://cop31.tr/assets/docs/action-agenda/cop31-antalya-ai-pledge-text.pdf\" target=\"_blank\" rel=\"noopener\">Antalya AI Pledge</a>, which asks signatories to power AI infrastructure with clean energy.")
+p("IRENA also supported the <a href=\"https://cop31.tr/assets/docs/action-agenda/cop31-antalya-ai-pledge-text.pdf\" target=\"_blank\" rel=\"noopener\">Antalya AI Pledge</a> on powering AI infrastructure with clean energy.")
 endsec()
 
 sec("s5", "What Energy Planning Week adds")
-p("<a href=\"https://www.irena.org/Events/2026/Dec/Energy-Planning-Week-2026\" target=\"_blank\" rel=\"noopener\">Energy Planning Week 2026</a>, co-hosted with GET.transform in Bonn from 1 to 4 December, is the first working gathering of the planning community after COP31. Sessions cover forecasting, scenarios and data quality.")
+p("<a href=\"https://www.irena.org/Events/2026/Dec/Energy-Planning-Week-2026\" target=\"_blank\" rel=\"noopener\">Energy Planning Week 2026</a>, co-hosted with GET.transform in Bonn from 1 to 4 December, the first working gathering of the planning community after COP31. Sessions cover forecasting, scenarios and data quality.")
 p("The promise is narrower and more useful. AI gives a small team the coverage of a larger one, provided the institution keeps ownership of the model, the data and the decision.", "closing")
 endsec()
 
