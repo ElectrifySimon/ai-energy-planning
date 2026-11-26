@@ -47,7 +47,7 @@ body.staticrypt-body{
   font-size:clamp(26px,3.4vw,34px) !important;line-height:1.15 !important;letter-spacing:-.01em;
   margin:0 0 14px !important;
 }
-.staticrypt-instructions{color:#a7bdcb !important;font-size:14px !important;line-height:1.6 !important;margin:0 0 30px !important;max-width:34em}
+.staticrypt-instructions{color:#a7bdcb !important;font-size:14px !important;line-height:1.6 !important;margin:0 0 30px !important;max-width:52em}
 .staticrypt-hr{border-top:1px solid rgba(255,255,255,.18) !important;margin:26px 0 !important}
 .staticrypt-password-container{background:transparent !important;border:0 !important}
 .staticrypt-password-container input, input[type="password"], input[type="text"]{
