@@ -40,7 +40,7 @@ if (kicker) {
   const text = kicker.dataset.text || kicker.textContent.trim();
   mount(kicker, (
     <GradientText
-      colors={['#7fd4ff', '#3fa9e0', '#a9e6ff', '#3fa9e0']}
+      colors={['#95ADC9', '#5CA8D8', '#0073AB', '#5CA8D8']}
       animationSpeed={9}
       angle={90}
       yoyo
@@ -77,15 +77,15 @@ const aurora = document.querySelector('[data-island="aurora"]');
 if (aurora) {
   mount(aurora, (
     <Aurora
-      colorStops={['#03121e', '#2fc0f5', '#0a3552']}
+      colorStops={['#002339', '#0073AB', '#00537D']}
       amplitude={1.15}
       blend={0.34}
       speed={0.55}
       layers={2}
       height={0.55}
       glow={1}
-      brightness={1.3}
-      opacity={1}
+      brightness={1.0}
+      opacity={0.78}
       mouseInteraction
     />
   ));
