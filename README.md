@@ -37,4 +37,4 @@ Static files served from the repository root by GitHub Pages. No build step runs
 
 ## Status
 
-Draft text, 26 November 2026. Not cleared for circulation outside IRENA.
+Text as of 26 November 2026, ahead of Energy Planning Week 2026.
