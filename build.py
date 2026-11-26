@@ -144,9 +144,21 @@ def fig_nigeria():
 def fig_leap():
     openfig("f-leap", "Who uses LEAP",
             "One dot per country or territory, 210 in total.")
-    B.append("""
+    COLS, TOTAL, USED = 30, 210, 65
+    pitch, r, pad = 30, 8.2, 18
+    w, h = COLS * pitch, 7 * pitch
+    dots = []
+    for i in range(TOTAL):
+        col, row = i % COLS, i // COLS
+        cx = pad + col * pitch + pitch / 2
+        cy = pad + row * pitch + pitch / 2
+        cls = "dot lit" if i < USED else "dot"
+        dots.append(f'<circle class="{cls}" cx="{cx:g}" cy="{cy:g}" r="{r:g}" style="transition-delay:{(i*7)}ms"/>')
+    B.append(f"""
   <div class="dots-wrap">
-    <svg id="leap-grid" role="img" aria-label="Unit chart: 65 of 210 countries and territories have used LEAP for a nationally determined contribution, long-term strategy or transparency report."></svg>
+    <svg id="leap-grid" viewBox="0 0 {w + pad*2} {h + pad*2}" width="{w + pad*2}" height="{h + pad*2}" role="img" aria-label="Unit chart: 65 of 210 countries and territories have used LEAP for a nationally determined contribution, long-term strategy or transparency report.">
+      {''.join(dots)}
+    </svg>
     <div class="dot-caption">
       <p class="big"><span data-count="31" data-suffix="%">31%</span></p>
       <p>of countries and territories have put LEAP behind a formal submission. The remaining 145 dots are states with no recorded use.</p>

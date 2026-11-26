@@ -1,9 +1,11 @@
-/* Page behaviour: reveal on scroll, dot field, reading progress. */
+/* Page behaviour: reveal on scroll, dot field, reading progress.
+   Content is visible by default. The hiding class is applied only when the
+   observer is available, so a blocked or failed script never blanks the page. */
 (function () {
   'use strict';
 
   /* ---------- reveal ---------- */
-  var revealEls = document.querySelectorAll('[data-reveal]');
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -12,15 +14,27 @@
           io.unobserve(e.target);
         }
       });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
-    revealEls.forEach(function (el) { io.observe(el); });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+
+    revealEls.forEach(function (el) {
+      var top = el.getBoundingClientRect().top;
+      if (top > window.innerHeight * 0.9) { el.classList.add('pre'); }
+      io.observe(el);
+    });
+
+    /* Safety net: anything still hidden after a few seconds is shown. */
+    window.setTimeout(function () {
+      document.querySelectorAll('.pre:not(.on)').forEach(function (el) {
+        el.classList.add('on');
+      });
+    }, 3000);
   } else {
     revealEls.forEach(function (el) { el.classList.add('on'); });
   }
 
   /* ---------- dot field: 210 countries, 65 lit ---------- */
   var grid = document.getElementById('leap-grid');
-  if (grid) {
+  if (grid && !grid.firstChild) {
     var TOTAL = 210, USED = 65, COLS = 30;
     var svgNS = 'http://www.w3.org/2000/svg';
     var pitch = 30, r = 8.2, pad = 18;
@@ -60,10 +74,4 @@
     }, { passive: true });
     paint();
   }
-
-  /* ---------- demand rails: fill width from the value ---------- */
-  document.querySelectorAll('[data-rail]').forEach(function (rail) {
-    var v = parseFloat(rail.dataset.rail);
-    rail.style.setProperty('--fill', (v / 120 * 100).toFixed(2) + '%');
-  });
 })();
