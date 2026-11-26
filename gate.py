@@ -25,13 +25,14 @@ SKIN = """
 .staticrypt-html, body.staticrypt-body{background:#04101a !important;}
 body.staticrypt-body{
   font-family:Inter,system-ui,sans-serif;
-  display:grid !important;place-items:center;min-height:100svh;margin:0 !important;padding:0 !important;
+  display:flex !important;flex-direction:column;justify-content:center;align-items:center;min-height:100svh;margin:0 !important;padding:0 !important;
   background:
     radial-gradient(70% 55% at 72% 12%, rgba(0,115,171,.30), transparent 62%),
     #04101a !important;
 }
-.staticrypt-page{width:100% !important;max-width:520px !important;padding:0 28px !important;margin:0 !important;box-sizing:border-box}
+.staticrypt-page{width:100% !important;max-width:520px !important;padding:0 28px !important;margin:0 auto !important;position:static !important;top:auto !important;box-sizing:border-box}
 .staticrypt-page::before{
+  margin-top:0;
   content:"IRENA";display:block;font-family:Montserrat,sans-serif;font-weight:700;
   font-size:13px;letter-spacing:.22em;color:#fff;margin:0 0 44px;
 }
