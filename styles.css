@@ -101,7 +101,7 @@ main{display:block}
 }
 .sec h2::before{
   content:"";display:block;width:38px;height:2px;background:var(--blue);margin:0 0 20px;
-  transform:scaleX(0);transform-origin:0 50%;transition:transform .7s cubic-bezier(.2,.7,.2,1);
+  transform:scaleX(1);transform-origin:0 50%;transition:transform .7s cubic-bezier(.2,.7,.2,1);
 }
 .sec.on h2::before{transform:scaleX(1)}
 p{margin:0 0 22px;max-width:32em}
@@ -145,10 +145,11 @@ figcaption{
 .fill{
   position:absolute;left:0;top:0;bottom:0;width:var(--fill,0%);
   background:linear-gradient(90deg,var(--blue-deep),var(--blue) 62%,var(--blue));
-  transform:scaleX(0);transform-origin:0 50%;
+  transform:scaleX(1);transform-origin:0 50%;
   transition:transform 1.1s cubic-bezier(.16,.84,.24,1);
 }
-.fig.on .fill{transform:scaleX(1)}
+.pre .fill{transform:scaleX(0)}
+.pre.on .fill{transform:scaleX(1)}
 .fill.future{background:linear-gradient(90deg,var(--blue-deep),var(--blue) 60%,var(--blue));opacity:.92}
 .rail-v{font-family:Montserrat,sans-serif;font-size:22px;font-weight:600;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
 .rail-v small{display:block;font-family:Inter,sans-serif;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.04em}
@@ -160,9 +161,10 @@ figcaption{
 /* dot field */
 .dots-wrap{display:block}
 #leap-grid{width:100%;height:auto;max-width:660px}
-.dot{fill:var(--rule-2);opacity:0;transition:opacity .5s ease}
+.dot{fill:var(--rule-2);opacity:1;transition:opacity .5s ease}
 .dot.lit{fill:var(--blue)}
-.fig.on .dot{opacity:1}
+.pre .dot{opacity:0}
+.pre.on .dot{opacity:1}
 .dot-caption{display:flex;align-items:baseline;gap:20px;margin-top:20px;padding-top:16px;border-top:1px solid var(--rule)}
 .dot-caption p{margin:0;font-size:12.5px;line-height:1.5;color:var(--muted);max-width:40em}
 .dot-figure{text-align:left}
@@ -173,7 +175,8 @@ figcaption{
 .ruler{width:100%;height:auto;overflow:visible}
 .ruler .axis{stroke:var(--rule-2);stroke-width:1}
 .ruler .seg{stroke:var(--blue);stroke-width:8;stroke-linecap:butt;stroke-dasharray:1000;stroke-dashoffset:1000;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.7,.2,1)}
-.fig.on .ruler .seg{stroke-dashoffset:0}
+.pre .ruler .seg{stroke-dashoffset:400}
+.pre.on .ruler .seg{stroke-dashoffset:0}
 .ruler .tick{stroke:var(--rule-2);stroke-width:1}
 .ruler .tick-major{stroke:var(--ink);stroke-width:1}
 .ruler text{font-family:Inter,sans-serif;font-size:12px;fill:var(--muted)}
@@ -187,7 +190,9 @@ figcaption{
 .lane-h b{font-family:Montserrat,sans-serif;font-size:18px;color:var(--ink);font-weight:600}
 .lane-track{position:relative;height:30px;background:var(--grey-fill)}
 .lane-fill{position:absolute;inset:0 auto 0 0;width:var(--fill,0%);background:var(--blue);transform:scaleX(0);transform-origin:0 50%;transition:transform 1s cubic-bezier(.16,.84,.24,1) .1s}
-.fig.on .lane-fill{transform:scaleX(1)}
+.lane-fill{transform:scaleX(1)}
+.pre .lane-fill{transform:scaleX(0)}
+.pre.on .lane-fill{transform:scaleX(1)}
 .gap{
   position:absolute;inset:0 auto 0 0;left:var(--from,0%);width:var(--gapw,0%);
   background:repeating-linear-gradient(135deg,rgba(88,88,90,.22) 0 6px,rgba(88,88,90,.05) 6px 12px);
@@ -204,7 +209,8 @@ figcaption{
 .band{display:grid;grid-template-columns:repeat(5,1fr);gap:26px;margin:6px 0 0;padding:0}
 .band li{list-style:none;padding:18px 0 4px;border-top:1px solid var(--rule);position:relative;transition:border-color .3s ease}
 .band li::after{content:"";position:absolute;left:0;top:-1px;height:2px;width:0;background:var(--blue);transition:width .8s cubic-bezier(.2,.7,.2,1)}
-.fig.on .band li::after{width:100%}
+.pre .band li::after{width:0}
+.pre.on .band li::after{width:100%}
 .band li:nth-child(2)::after{transition-delay:.08s}
 .band li:nth-child(3)::after{transition-delay:.16s}
 .band li:nth-child(4)::after{transition-delay:.24s}
