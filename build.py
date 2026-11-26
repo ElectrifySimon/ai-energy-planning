@@ -91,20 +91,16 @@ def rails(rows, maximum, unit, step, note, future_cls=" future"):
 
 def fig_demand():
     openfig("f-demand", "Data centre electricity demand, EU",
-            "Terawatt hours consumed in 2024 and projected for 2030, on one scale.")
+            "Terawatt hours, 2024 and 2030.")
     rails([("2024", "actual", 68), ("2030", "projected", 114)], 120, "TWh",
-          ["0", "30", "60", "90", "120 TWh"],
-          '<span><b class="delta">+46 TWh</b> over six years</span>'
-          '<span>2030 share of EU electricity demand: <b>3.2%</b></span>')
+          ["0", "30", "60", "90", "120 TWh"], None)
     closefig("Source: European Commission (2026).")
 
 def fig_solver():
     openfig("f-solver", "Solver speed against the current release",
-            "Reported speed-up of the interior-point method, current HiGHS release at 1\u00d7.")
+            "Reported speed-up, current release at 1\u00d7.")
     rails([("TZ-HiGHS", "prototype", 16), ("HiGHS", "current release", 1)], 16, "\u00d7",
-          ["0", "4\u00d7", "8\u00d7", "12\u00d7", "16\u00d7"],
-          '<span><b class="delta">16\u00d7</b> reported speed-up</span>'
-          '<span>Same benchmark, same machine class</span>')
+          ["0", "4\u00d7", "8\u00d7", "12\u00d7", "16\u00d7"], None)
     closefig("Source: TransitionZero (2026), Open Energy Benchmark. Vendor-reported, not an independent evaluation.")
 
 def fig_clusters():
@@ -113,7 +109,7 @@ def fig_clusters():
              ("05", "Transparency", "doclines")]
     B.append('<figure class="fig" id="f-clusters" data-reveal>')
     B.append('<div class="fig-top"><h3>Five value clusters</h3></div>')
-    B.append('<p class="fig-sub">How IRENA\'s 2026 review sorts digital and AI applications in power systems.</p>')
+    B.append('<p class="fig-sub">IRENA\'s five application areas.</p>')
     B.append('<ol class="band">')
     for n, t, ic in items:
         B.append(f'<li><span class="num">{n}</span>{icon(ic, "ic band-ic")}<h3>{t}</h3></li>')
@@ -123,7 +119,7 @@ def fig_clusters():
 def fig_nigeria():
     reached, target, scale = 7.8, 17.5, 20.0
     openfig("f-nigeria", "People reached against the DARES target",
-            "Millions of people with new or improved electricity, on one scale to 20 million.")
+            "Millions of people, one scale to 20 million.")
     f1 = round(reached / scale * 100, 2)
     f2 = round(target / scale * 100, 2)
     gap = round(f2 - f1, 2)
@@ -147,7 +143,7 @@ def fig_nigeria():
 
 def fig_leap():
     openfig("f-leap", "Who uses LEAP",
-            "One dot for each country or territory, 210 in total. Filled dots are the 65 that have used LEAP for a nationally determined contribution, long-term strategy or transparency report.")
+            "One dot per country or territory, 210 in total.")
     B.append("""
   <div class="dots-wrap">
     <svg id="leap-grid" role="img" aria-label="Unit chart: 65 of 210 countries and territories have used LEAP for a nationally determined contribution, long-term strategy or transparency report."></svg>
@@ -166,7 +162,6 @@ def fig_pledges():
              ("Collective progress towards just energy futures", "bolt")]
     B.append('<figure class="fig" id="f-pledges" data-reveal>')
     B.append('<div class="fig-top"><h3>Five commitments of the SAGES framework</h3></div>')
-    B.append('<p class="fig-sub">Shared AI Governance for Energy Systems, published with IRENA among the co-authors.</p>')
     B.append('<ol class="pledges">')
     for i, (t, ic) in enumerate(items, 1):
         B.append(f'<li>{icon(ic, "ic pledge-ic")}<span class="n">{i:02d}</span><h3>{t}</h3></li>')
@@ -174,15 +169,15 @@ def fig_pledges():
     closefig("Source: Tkachenko et al. (2026), Shared AI Governance for Energy Systems.")
 
 def fig_road():
-    items = [("Planning frameworks", "that treat data centre demand as a variable", "layers"),
-             ("Knowledge platform", "shared across the planning community", "database"),
-             ("Connection rules", "flexible enough for storage and data centres", "link"),
-             ("Data standards", "for secure exchange between institutions", "shield"),
+    items = [("Planning frameworks", "for data centre demand", "layers"),
+             ("Knowledge platform", "shared across the community", "database"),
+             ("Connection rules", "for storage and data centres", "link"),
+             ("Data standards", "for secure exchange", "shield"),
              ("Skills programmes", "for the planners who run the models", "people"),
-             ("Finance guidance", "for development finance institutions", "coins")]
+             ("Finance guidance", "for development finance", "coins")]
     B.append('<figure class="fig" id="f-road" data-reveal>')
     B.append('<div class="fig-top"><h3>Six actions for 2026 to 2028</h3></div>')
-    B.append('<p class="fig-sub">The plan to accelerate solutions on AI and digitalisation, as written into the COP Action Agenda. The six run in parallel, not in sequence.</p>')
+    B.append('<p class="fig-sub">All six run at once.</p>')
     B.append('<ol class="acts">')
     for i, (t, d, ic) in enumerate(items, 1):
         B.append(f'<li>{icon(ic, "ic act-ic")}<h3>{t}</h3><p>{d}</p></li>')
@@ -222,64 +217,44 @@ HERO = f"""
 </header>"""
 
 sec("s1")
-p("COP31 closed with electrification at the centre of the climate agenda. The Presidency's target of a 35% share for electricity in final energy demand by 2035 sits alongside the global goal of tripling renewable capacity and doubling energy efficiency by 2030 [1][9]. Both land on national planning offices, which must turn them into grids, storage and project pipelines inside budget cycles of months.", "lead")
-p("Demand pressure is arriving fastest in Europe. Data centres in the EU consumed 68 TWh of electricity in 2024, a figure the European Commission projects will reach 114 TWh by 2030, or 3.2% of EU electricity demand [2].")
-fig_demand()
-p("Skills set a second limit. In EY's 2025 survey of oil and gas and chemicals executives, 82% cited too few workers with the right skills as a challenge to adopting new technology [3]. A model that cannot be fed, checked or explained becomes a liability in a ministry.")
-endsec()
+p("COP31 put electrification at the centre of the climate agenda. The Presidency target is a 35% share for electricity in final energy demand by 2035, with tripling renewables and doubling efficiency. <a href=\"https://iklim.gov.tr/en/cop31-president-designate-and-minister-kurum-unveils-cop31-action-agenda-news-4985\" target=\"_blank\" rel=\"noopener\">The COP31 Action Agenda</a> sets both. For planning offices they arrive as work: grids, storage and pipelines, inside budget cycles of months.", "lead")
 
 sec("s2", "What AI changes")
-p("IRENA's 2026 review of digitalisation and AI in power systems maps the field into five value clusters: monitoring, forecasting, operational optimisation, end-user automation and transparency [4]. Six case studies from IRENA Innovation Week 2025 cover congestion management, predictive maintenance, non-firm connections, interoperability standards and virtual power plants. Digital tools unlock latent grid capacity, reduce curtailment and improve asset performance.")
+p("<a href=\"https://www.irena.org/Publications/2026/May/Digitalisation-and-AI-for-transforming-power-systems\" target=\"_blank\" rel=\"noopener\">IRENA's 2026 review</a> of digitalisation and AI in power systems sorts the field into five areas: monitoring, forecasting, operational optimisation, end-user automation and transparency.")
 fig_clusters()
-p("In Sierra Leone, a national electrification platform built with the geospatial firm VIDA maps settlements, buildings and grid lines with machine learning, then matches each community to grid extension, a mini-grid or standalone solar. Its site list holds 21,075 settlements [6]. Ministries, funders and developers work from one living picture instead of separate spreadsheets, which shortens the distance between a least-cost plan and a project pipeline.")
-p("Nigeria runs the same logic at national scale. The Rural Electrification Agency reports the same chain of figures for the Nigeria Electrification Programme and the DARES programme that builds on it: pipeline, mini-grid sites, connections, installed capacity and disbursement [12]. It counts 176 mini-grids and 7.8 million people reached, against a DARES target of 17.5 million [12].")
+p("Data centres in the EU used 68 TWh in 2024, a figure the <a href=\"https://build-up.ec.europa.eu/en/resources-and-tools/publications/report-energy-efficiency-data-centres-eu\" target=\"_blank\" rel=\"noopener\">European Commission</a> projects at 114 TWh by 2030, 3.2% of EU electricity demand.")
+fig_demand()
+p("An <a href=\"https://www.ey.com/content/dam/ey-unified-site/ey-com/en-us/campaigns/energy-resources/documents/ey-ogc-future-of-energy-external-report.pdf\" target=\"_blank\" rel=\"noopener\">EY survey from 2025</a> found 82% of energy executives citing too few skilled workers as an obstacle to new technology.")
+p("In Sierra Leone, a national platform built with <a href=\"https://vida.place/applications/planning\" target=\"_blank\" rel=\"noopener\">VIDA</a> maps settlements, buildings and grid lines, then matches each community to grid extension, a mini-grid or standalone solar. Its list holds 21,075 settlements, and funders, ministries and developers work from one picture instead of separate spreadsheets.")
+p("Nigeria runs it at scale. The <a href=\"https://nep.rea.gov.ng/\" target=\"_blank\" rel=\"noopener\">Rural Electrification Agency</a> counts 176 mini-grids and 7.8 million reached, against a DARES target of 17.5 million.")
 fig_nigeria()
-p("Almost 80,000 people in 210 countries and territories use LEAP, the Low Emissions Analysis Platform developed by the Stockholm Environment Institute, and at least 65 countries have used it for their nationally determined contributions, long-term strategies or transparency reports [7]. The 2027 version adds AI that lets non-specialist planners explore a model in natural language and interrogate its assumptions. AI widens who can test a pathway, while the calculations stay in the model.")
+p("Almost 80,000 people in 210 countries use <a href=\"https://leap.sei.org/\" target=\"_blank\" rel=\"noopener\">LEAP</a>, from the Stockholm Environment Institute. At least 65 countries have used it for climate pledges. The 2027 version adds AI that lets non-specialists explore a model in plain language.")
 fig_leap()
-p("The same shift reaches the tools themselves. TransitionZero, a non-profit, set AI agents on the interior-point method of HiGHS, the open-source solver under many energy models, and reports a prototype up to 16 times faster than the current release on the Open Energy Benchmark [13]. Solver time sets how many scenarios a ministry can test before a decision is due, so a gain inside the code changes what a planning office can put in front of a minister.")
+p("<a href=\"https://www.transitionzero.org/events/introducing-conductor-and-tz-highs-launch-webinar\" target=\"_blank\" rel=\"noopener\">TransitionZero</a>, a non-profit, set AI agents on the solver underneath many energy models and reports a prototype up to 16 times faster than the current release. Solver time sets how many scenarios a ministry can test before a decision.")
 fig_solver()
-p("One layer up, the assistant is becoming part of the workflow. A planner can ask it to draft a scenario, check inputs against regional data or explain why a run failed, then accept or reject each edit before it is applied [14]. The instructive part is how the safeguards are split: a tightly constrained assistant for general users, and a local tool where an experienced modeller connects their own AI and keeps the model and data on their own machine [13]. Control follows expertise.")
+p("One layer up, the assistant joins the workflow: draft a scenario, check inputs, explain a failed run, each edit accepted or rejected. Control follows expertise. A constrained assistant for general users, a local tool for modellers who keep their own AI and data locally.")
 endsec()
 
 sec("s3", "Who governs the result")
-p("Institutional risk matters more than technical risk. A government that cannot inspect a model, trace its inputs or reproduce its output has lost control of the plan, whatever the accuracy of the forecast. The Shared AI Governance for Energy Systems (SAGES) framework, published in June 2026 with IRENA among its co-authors, sets five commitments [8]:")
+p("Institutional risk outweighs technical risk. A government that cannot inspect a model, trace its inputs or reproduce its output has lost control of the plan. The <a href=\"https://doi.org/10.33774/coe-2026-0gzfx\" target=\"_blank\" rel=\"noopener\">Shared AI Governance for Energy Systems</a> framework, published in June 2026 with IRENA among its co-authors, sets five commitments.")
 fig_pledges()
-p("Working groups cover vendor engagement, demonstration tools, sovereignty, and capacity building.")
+p("Working groups cover vendors, demonstration, sovereignty and capacity.")
 endsec()
 
 sec("s4", "The delivery route")
-p("Delivery now has a vehicle in the COP Action Agenda. The LTES Network hosts a Plan to Accelerate Solutions on AI and digitalisation for a smart, resilient and efficient energy system, tied to tripling renewables and doubling energy efficiency [9]. Actions for 2026 to 2028 include planning frameworks that treat data centre demand as a variable, a knowledge platform, flexible connection rules, standards for secure data exchange, skills programmes and guidance for development finance.")
+p("The COP Action Agenda carries delivery. The <a href=\"https://climateaction.unfccc.int/assets/documents/121_.pdf\" target=\"_blank\" rel=\"noopener\">LTES Network</a> hosts a Plan to Accelerate Solutions on AI and digitalisation, tied to tripling renewables and doubling efficiency. Actions for 2026 to 2028 cover planning frameworks, a knowledge platform, connection rules, data standards, skills and finance.")
 fig_road()
-p("At COP31, IRENA also supported the Antalya AI Pledge, which asks signatories to power AI infrastructure with zero- and low-emission energy and to integrate it into electricity grids [10].")
+p("IRENA also supported the <a href=\"https://cop31.tr/assets/docs/action-agenda/cop31-antalya-ai-pledge-text.pdf\" target=\"_blank\" rel=\"noopener\">Antalya AI Pledge</a>, which asks signatories to power AI infrastructure with clean energy.")
 endsec()
 
 sec("s5", "What Energy Planning Week adds")
-p("Energy Planning Week 2026, co-hosted by IRENA and GET.transform in Bonn from 1 to 4 December 2026, is the first working gathering of the planning community after COP31 [11]. It brings together the teams behind these tools, with applications grouped around demand and load forecasting, scenario development, and data quality assurance. A session on AI for energy planning is built for adoption: a planner can see how a method performs on a real system, and that evidence feeds the LTES Network's 2026 to 2028 actions, which depend on countries willing to test new methods in live cases.")
-p("The promise of AI in energy planning is narrower than the publicity and more useful. It gives a small team the coverage of a larger one, provided the institution keeps ownership of the model, the data and the decision.", "closing")
+p("<a href=\"https://www.irena.org/Events/2026/Dec/Energy-Planning-Week-2026\" target=\"_blank\" rel=\"noopener\">Energy Planning Week 2026</a>, co-hosted with GET.transform in Bonn from 1 to 4 December, is the first working gathering of the planning community after COP31. Sessions cover forecasting, scenarios and data quality.")
+p("The promise is narrower and more useful. AI gives a small team the coverage of a larger one, provided the institution keeps ownership of the model, the data and the decision.", "closing")
 endsec()
 
 BODY = "\n".join(B)
 
-used = []
-for m in re.finditer(r"\[(\d+)\]", BODY):
-    n = int(m.group(1))
-    if n not in used:
-        used.append(n)
-missing = [n for n in used if n not in REFS]
-assert not missing, f"cited but undefined: {missing}"
-order = sorted(used, key=lambda n: used.index(n))
-new = {old: i + 1 for i, old in enumerate(order)}
-
-def cite(m):
-    k = new[int(m.group(1))]
-    return f'\u00a0<a class="cite" href="#r{k}" title="Reference {k}">[{k}]</a>'
-
-BODY = re.sub(r"\s?\[(\d+)\]", cite, BODY)
-
-refs_html = "\n".join(
-    f'<li id="r{new[o]}"><span class="ref-n">{new[o]}</span><span>{REFS[o][0]} <a href="{REFS[o][1]}" target="_blank" rel="noopener">{REFS[o][1]}</a></span></li>'
-    for o in order
-)
+words = len(re.sub(r"<[^>]+>", " ", BODY).split())
 
 CSS = (ROOT / "styles.css").read_text()
 
@@ -305,10 +280,6 @@ page = f"""<!DOCTYPE html>
 <main id="main">
   <article class="prose">
 {BODY}
-    <section class="sec refs" id="refs">
-      <div class="text"><h2>References</h2></div>
-      <ol class="reflist">{refs_html}</ol>
-    </section>
   </article>
 </main>
 <footer class="foot">
@@ -324,4 +295,4 @@ page = f"""<!DOCTYPE html>
 """
 
 (ROOT / "index.plain.html").write_text(page)
-print("built index.plain.html", len(page), "bytes")
+print("built index.plain.html", len(page), "bytes,", words, "words")
