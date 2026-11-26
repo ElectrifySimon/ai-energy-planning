@@ -25,20 +25,17 @@ SKIN = """
 .staticrypt-html, body.staticrypt-body{background:#04101a !important;}
 body.staticrypt-body{
   font-family:Inter,system-ui,sans-serif;
-  display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;
+  display:grid !important;place-items:center;min-height:100svh;margin:0 !important;padding:0 !important;
   background:
     radial-gradient(70% 55% at 72% 12%, rgba(0,115,171,.30), transparent 62%),
     #04101a !important;
 }
-.staticrypt-page{width:100%;max-width:520px;padding:0 28px;margin:0;box-sizing:border-box}
+.staticrypt-page{width:100% !important;max-width:520px !important;padding:0 28px !important;margin:0 !important;box-sizing:border-box}
 .staticrypt-page::before{
   content:"IRENA";display:block;font-family:Montserrat,sans-serif;font-weight:700;
-  font-size:13px;letter-spacing:.22em;color:#fff;margin:0 0 46px;
+  font-size:13px;letter-spacing:.22em;color:#fff;margin:0 0 44px;
 }
-.staticrypt-page::after{
-  content:"Expert Insight";display:block;font-family:Inter,sans-serif;font-size:11px;
-  letter-spacing:.2em;text-transform:uppercase;color:#7f9aab;margin:34px 0 0;
-}
+
 .staticrypt-form{
   background:transparent !important;box-shadow:none !important;border:0 !important;
   max-width:none !important;margin:0 !important;padding:0 !important;text-align:left !important;
@@ -50,6 +47,7 @@ body.staticrypt-body{
 }
 .staticrypt-instructions{color:#a7bdcb !important;font-size:14px !important;line-height:1.6 !important;margin:0 0 30px !important;max-width:34em}
 .staticrypt-hr{border-top:1px solid rgba(255,255,255,.18) !important;margin:26px 0 !important}
+.staticrypt-password-container{background:transparent !important;border:0 !important}
 .staticrypt-password-container input, input[type="password"], input[type="text"]{
   background:transparent !important;border:0 !important;border-bottom:1px solid rgba(255,255,255,.34) !important;
   border-radius:0 !important;color:#fff !important;font-size:16px !important;padding:12px 34px 12px 0 !important;
@@ -58,6 +56,7 @@ body.staticrypt-body{
 input::placeholder{color:#7f9aab !important}
 .staticrypt-password-container input:focus{border-bottom-color:#3fa9e0 !important;outline:none}
 .staticrypt-remember{display:none !important}
+.staticrypt-form *{text-align:left}
 .staticrypt-decrypt-button{
   background:#0073AB !important;border:0 !important;border-radius:0 !important;color:#fff !important;
   font-family:Inter,sans-serif !important;font-size:11.5px !important;font-weight:600 !important;
