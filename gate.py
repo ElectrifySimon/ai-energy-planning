@@ -37,6 +37,7 @@ body.staticrypt-body{
   font-size:13px;letter-spacing:.22em;color:#fff;margin:0 0 44px;
 }
 
+.staticrypt-content{width:100% !important;display:flex !important;justify-content:center !important;align-items:center !important}
 .staticrypt-form{
   background:transparent !important;box-shadow:none !important;border:0 !important;
   max-width:none !important;margin:0 !important;padding:0 !important;text-align:left !important;
