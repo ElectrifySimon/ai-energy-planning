@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Build the AI in energy planning long-read page."""
-import re, math, pathlib
+import re, pathlib
 
 ROOT = pathlib.Path(__file__).parent
-OUT = ROOT
 
 REFS = {
  1: ("COP31 Presidency (2026). COP31 President Designate and Minister Kurum unveils COP31 Action Agenda.", "https://iklim.gov.tr/en/cop31-president-designate-and-minister-kurum-unveils-cop31-action-agenda-news-4985"),
@@ -22,6 +21,34 @@ REFS = {
  14: ("TransitionZero (2026). AMP AI assistant.", "https://docs.transitionzero.org/platform/amp-ai-assistant"),
 }
 
+# ------------------------------------------------------------------ icons
+ICONS = {
+ "eye": '<circle cx="12" cy="12" r="3.2"/><path d="M2.6 12S6 5.8 12 5.8 21.4 12 21.4 12 18 18.2 12 18.2 2.6 12 2.6 12Z"/>',
+ "trend": '<path d="M3 17.5 8.6 11l3.6 3.2L21 5.6"/><path d="M21 10.4V5.6h-4.8"/><path d="M3 21h18"/>',
+ "forecast": '<path d="M3 18.5h3.2l2.4-6.2 3 4.4 2.6-8.2 3 6.4H21"/><circle cx="17.2" cy="14.9" r="1.4"/>',
+ "home": '<path d="M4 10.6 12 4l8 6.6V20a1 1 0 0 1-1 1h-4.4v-5.6H9.4V21H5a1 1 0 0 1-1-1Z"/><path d="M15.4 3v4.4"/>',
+ "doclines": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/><path d="M8.6 13h6.8M8.6 16.6h4.4"/>',
+ "sliders": '<path d="M4 7h5"/><path d="M15 7h5"/><circle cx="12" cy="7" r="2.6"/><path d="M4 17h9"/><path d="M19 17h1"/><circle cx="16" cy="17" r="2.6"/>',
+ "plug": '<path d="M9 3v5"/><path d="M15 3v5"/><path d="M6.5 8h11v3.2a5.5 5.5 0 0 1-11 0Z"/><path d="M12 16.7V21"/>',
+ "doc": '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7"/><path d="M14 3v6h6"/><circle cx="16.4" cy="16.4" r="3.1"/><path d="M18.7 18.7 21 21"/>',
+ "layers": '<path d="M12 3 3 7.6l9 4.6 9-4.6Z"/><path d="m3 12.4 9 4.6 9-4.6"/><path d="m3 17 9 4.6L21 17"/>',
+ "database": '<ellipse cx="12" cy="6" rx="7.5" ry="3"/><path d="M4.5 6v12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6"/><path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/>',
+ "link": '<path d="M9.4 14.6 14.6 9.4"/><path d="M7 17a3.9 3.9 0 0 1 0-5.5l2.8-2.8"/><path d="M17 7a3.9 3.9 0 0 1 0 5.5l-2.8 2.8"/>',
+ "shield": '<path d="M12 3 5 5.8v5.6c0 4.3 2.9 7.6 7 9.6 4.1-2 7-5.3 7-9.6V5.8Z"/><path d="m9 12 2.2 2.2L15.4 10"/>',
+ "globe": '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.4 4 5.6 4 9s-1.4 6.6-4 9c-2.6-2.4-4-5.6-4-9s1.4-6.6 4-9Z"/>',
+ "scales": '<path d="M12 4v16"/><path d="M6 8h12"/><path d="M9 20h6"/><path d="M4 8 6.6 14h-5.2Z"/><path d="M20 8l2.6 6h-5.2Z"/>',
+ "coins": '<ellipse cx="9" cy="7" rx="5.4" ry="2.6"/><path d="M3.6 7v4c0 1.4 2.4 2.6 5.4 2.6s5.4-1.2 5.4-2.6V7"/><path d="M9 13.6V17c0 1.4 2.4 2.6 5.4 2.6s5.4-1.2 5.4-2.6v-4"/>',
+ "people": '<circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3 2.5-5.2 5.5-5.2s5.5 2.2 5.5 5.2"/><circle cx="17" cy="9" r="2.4"/><path d="M15.6 14.9c2.6 0 4.6 2 4.6 4.6"/>',
+ "cpu": '<rect x="7" y="7" width="10" height="10" rx="1.6"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>',
+ "bolt": '<path d="M13 2 5 13.5h6L10 22l8-11.5h-6Z"/>',
+ "tower": '<path d="M12 3v18"/><path d="M6 21 12 3l6 18"/><path d="M8.4 14h7.2"/><path d="M9.6 9.5h4.8"/>',
+}
+
+def icon(name, cls="ic"):
+    return (f'<svg class="{cls}" viewBox="0 0 24 24" aria-hidden="true" '
+            f'fill="none" stroke="currentColor" stroke-width="1.7" '
+            f'stroke-linecap="round" stroke-linejoin="round">{ICONS[name]}</svg>')
+
 B = []
 
 def p(text, cls=""):
@@ -37,51 +64,66 @@ def sec(anchor, title=None):
 def endsec():
     B.append("</div></section>")
 
-def openfig(fid, title, tag, sub):
+def openfig(fid, title, sub):
     B.append(f"""
 <figure class="fig" id="{fid}" data-reveal>
-  <div class="fig-top"><h3>{title}</h3><span class="tag">{tag}</span></div>
+  <div class="fig-top"><h3>{title}</h3></div>
   <p class="fig-sub">{sub}</p>""")
 
-def closefig(caption):
-    B.append(f"  <figcaption>{caption}</figcaption>\n</figure>")
+def closefig(source):
+    B.append(f'  <figcaption>{source}</figcaption>\n</figure>')
+
+def rails(rows, maximum, unit, step, note, future_cls=" future"):
+    B.append('<div class="rails">')
+    for year, kind, v in rows:
+        fill = round(v / maximum * 100, 2)
+        B.append(f"""
+  <div class="rail">
+    <div class="rail-year">{year}<small>{kind}</small></div>
+    <div class="track"><span class="fill{future_cls if kind else ''}" style="--fill:{fill}%"></span></div>
+    <div class="rail-v">{v}<small>{unit}</small></div>
+  </div>""")
+    B.append("</div>")
+    ticks = "".join(f"<span>{t}</span>" for t in step)
+    B.append(f'<div class="scale">{ticks}</div>')
+    if note:
+        B.append(f'<div class="rail-note">{note}</div>')
 
 def fig_demand():
-    openfig("f-demand", "Data centre electricity demand, EU", "One scale",
-            "Terawatt hours consumed in 2024 and projected for 2030.")
-    B.append('<div class="rails">')
-    for year, kind, v, cls in [("2024", "actual", 68, ""), ("2030", "projected", 114, " future")]:
-        fill = round(v / 120 * 100, 2)
-        B.append(f"""
-  <div class="rail" data-rail="{v}">
-    <div class="rail-year">{year}<small>{kind}</small></div>
-    <div class="track"><span class="fill{cls}" style="--fill:{fill}%"></span></div>
-    <div class="rail-v">{v}<small>TWh</small></div>
-  </div>""")
-    B.append("""</div>
-  <div class="scale"><span>0</span><span>30</span><span>60</span><span>90</span><span>120 TWh</span></div>
-  <div class="rail-note">
-    <span><span class="delta">+46 TWh</span> over six years</span>
-    <span>2030 share of EU electricity demand: <b>3.2%</b></span>
-  </div>""")
-    closefig("Data: European Commission (2026). Bars share one scale from 0 to 120 TWh.")
+    openfig("f-demand", "Data centre electricity demand, EU",
+            "Terawatt hours consumed in 2024 and projected for 2030, on one scale.")
+    rails([("2024", "actual", 68), ("2030", "projected", 114)], 120, "TWh",
+          ["0", "30", "60", "90", "120 TWh"],
+          '<span><b class="delta">+46 TWh</b> over six years</span>'
+          '<span>2030 share of EU electricity demand: <b>3.2%</b></span>')
+    closefig("Source: European Commission (2026).")
+
+def fig_solver():
+    openfig("f-solver", "Solver speed against the current release",
+            "Reported speed-up of the interior-point method, current HiGHS release at 1\u00d7.")
+    rails([("TZ-HiGHS", "prototype", 16), ("HiGHS", "current release", 1)], 16, "\u00d7",
+          ["0", "4\u00d7", "8\u00d7", "12\u00d7", "16\u00d7"],
+          '<span><b class="delta">16\u00d7</b> reported speed-up</span>'
+          '<span>Same benchmark, same machine class</span>')
+    closefig("Source: TransitionZero (2026), Open Energy Benchmark. Vendor-reported, not an independent evaluation.")
 
 def fig_clusters():
-    items = [("01", "Monitoring"), ("02", "Forecasting"), ("03", "Operational optimisation"),
-             ("04", "End-user automation"), ("05", "Transparency")]
+    items = [("01", "Monitoring", "eye"), ("02", "Forecasting", "forecast"),
+             ("03", "Operational optimisation", "sliders"), ("04", "End-user automation", "home"),
+             ("05", "Transparency", "doclines")]
     B.append('<figure class="fig" id="f-clusters" data-reveal>')
-    B.append('<div class="fig-top"><h3>Five value clusters</h3><span class="tag">Framework</span></div>')
+    B.append('<div class="fig-top"><h3>Five value clusters</h3></div>')
     B.append('<p class="fig-sub">How IRENA\'s 2026 review sorts digital and AI applications in power systems.</p>')
     B.append('<ol class="band">')
-    for n, t in items:
-        B.append(f'<li><span class="idx">{n}</span><h3>{t}</h3></li>')
+    for n, t, ic in items:
+        B.append(f'<li><span class="num">{n}</span>{icon(ic, "ic band-ic")}<h3>{t}</h3></li>')
     B.append('</ol>')
     closefig("Source: IRENA (2026), Digitalisation and AI for transforming power systems.")
 
 def fig_nigeria():
     reached, target, scale = 7.8, 17.5, 20.0
-    openfig("f-nigeria", "People reached against the DARES target", "Progress",
-            "Millions of people with new or improved electricity. Both lanes share one scale to 20 million.")
+    openfig("f-nigeria", "People reached against the DARES target",
+            "Millions of people with new or improved electricity, on one scale to 20 million.")
     f1 = round(reached / scale * 100, 2)
     f2 = round(target / scale * 100, 2)
     gap = round(f2 - f1, 2)
@@ -101,10 +143,10 @@ def fig_nigeria():
     <span><i class="sw-blue"></i>People reached</span>
     <span><i class="sw-hatch"></i>Gap to the DARES target</span>
   </div>""")
-    closefig("Data: Rural Electrification Agency (2026), Nigeria Electrification Programme and DARES.")
+    closefig("Source: Rural Electrification Agency (2026).")
 
 def fig_leap():
-    openfig("f-leap", "Who uses LEAP", "Unit chart",
+    openfig("f-leap", "Who uses LEAP",
             "One dot for each country or territory, 210 in total. Filled dots are the 65 that have used LEAP for a nationally determined contribution, long-term strategy or transparency report.")
     B.append("""
   <div class="dots-wrap">
@@ -114,59 +156,36 @@ def fig_leap():
       <p>of countries and territories have put LEAP behind a formal submission. The remaining 145 dots are states with no recorded use.</p>
     </div>
   </div>""")
-    closefig("Data: Stockholm Environment Institute (2026). 65 of 210, rounded to 31 per cent.")
-
-def fig_solver():
-    openfig("f-solver", "Solver speed against the current release", "Vendor benchmark",
-            "Reported speed-up of the interior-point method. Ticks are spaced logarithmically, current HiGHS release at 1\u00d7.")
-    x0, x1, y = 74, 880, 128
-    def X(v): return round(x0 + (math.log2(v) / 4) * (x1 - x0), 1)
-    parts = ['<svg class="ruler" viewBox="0 0 960 190" role="img" aria-label="Scale showing the prototype at 16 times the speed of the current HiGHS release.">']
-    parts.append(f'<line class="axis" x1="{x0}" y1="{y}" x2="{x1+10}" y2="{y}"/>')
-    parts.append(f'<line class="seg" x1="{x0}" y1="{y}" x2="{X(16):.1f}" y2="{y}"/>')
-    for t in [1, 2, 4, 8, 16]:
-        cls = "tick-major" if t in (1, 16) else "tick"
-        parts.append(f'<line class="{cls}" x1="{X(t):.1f}" y1="{y-13}" x2="{X(t):.1f}" y2="{y+13}"/>')
-        if t != 16:
-            parts.append(f'<text x="{X(t):.1f}" y="{y+36}" text-anchor="middle">{t}\u00d7</text>')
-    parts.append(f'<text class="lbl" x="{x0}" y="{y-34}">Current HiGHS release</text>')
-    parts.append(f'<text class="lbl" x="{x1+10}" y="{y-34}" text-anchor="end">TZ-HiGHS prototype</text>')
-    parts.append(f'<text class="x16" x="{X(16):.1f}" y="{y+84}" text-anchor="middle">16\u00d7</text>')
-    parts.append(f'<text x="{X(16):.1f}" y="{y+104}" text-anchor="middle">reported speed-up</text>')
-    parts.append("</svg>")
-    B.append("".join(parts))
-    closefig("Data: TransitionZero (2026), prototype on the Open Energy Benchmark. Vendor-reported, not an independent evaluation.")
+    closefig("Source: Stockholm Environment Institute (2026).")
 
 def fig_pledges():
-    items = [
-        "AI as an empowering partner",
-        "Human accountability for final decisions",
-        "Trust that is proportional, purposeful and testable",
-        "Respect for national sovereignty",
-        "Collective progress towards just energy futures",
-    ]
+    items = [("AI as an empowering partner", "people"),
+             ("Human accountability for final decisions", "shield"),
+             ("Trust that is proportional, purposeful and testable", "scales"),
+             ("Respect for national sovereignty", "globe"),
+             ("Collective progress towards just energy futures", "bolt")]
     B.append('<figure class="fig" id="f-pledges" data-reveal>')
-    B.append('<div class="fig-top"><h3>Five commitments of the SAGES framework</h3><span class="tag">June 2026</span></div>')
-    B.append('<p class="fig-sub">Published with IRENA among the co-authors.</p>')
+    B.append('<div class="fig-top"><h3>Five commitments of the SAGES framework</h3></div>')
+    B.append('<p class="fig-sub">Shared AI Governance for Energy Systems, published with IRENA among the co-authors.</p>')
     B.append('<ol class="pledges">')
-    for i, t in enumerate(items, 1):
-        B.append(f'<li><span class="n">{i:02d}</span><h3>{t}</h3></li>')
+    for i, (t, ic) in enumerate(items, 1):
+        B.append(f'<li>{icon(ic, "ic pledge-ic")}<span class="n">{i:02d}</span><h3>{t}</h3></li>')
     B.append('</ol>')
     closefig("Source: Tkachenko et al. (2026), Shared AI Governance for Energy Systems.")
 
 def fig_road():
-    items = [("Planning frameworks", "that treat data centre demand as a variable"),
-             ("Knowledge platform", "shared across the planning community"),
-             ("Connection rules", "flexible enough for storage and data centres"),
-             ("Data standards", "for secure exchange between institutions"),
-             ("Skills programmes", "for the planners who run the models"),
-             ("Finance guidance", "for development finance institutions")]
+    items = [("Planning frameworks", "that treat data centre demand as a variable", "layers"),
+             ("Knowledge platform", "shared across the planning community", "database"),
+             ("Connection rules", "flexible enough for storage and data centres", "link"),
+             ("Data standards", "for secure exchange between institutions", "shield"),
+             ("Skills programmes", "for the planners who run the models", "people"),
+             ("Finance guidance", "for development finance institutions", "coins")]
     B.append('<figure class="fig" id="f-road" data-reveal>')
-    B.append('<div class="fig-top"><h3>Six actions for 2026 to 2028</h3><span class="tag">LTES Network</span></div>')
+    B.append('<div class="fig-top"><h3>Six actions for 2026 to 2028</h3></div>')
     B.append('<p class="fig-sub">The plan to accelerate solutions on AI and digitalisation, as written into the COP Action Agenda. The six run in parallel, not in sequence.</p>')
     B.append('<ol class="acts">')
-    for i, (t, d) in enumerate(items, 1):
-        B.append(f'<li><span class="idx">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>')
+    for i, (t, d, ic) in enumerate(items, 1):
+        B.append(f'<li>{icon(ic, "ic act-ic")}<h3>{t}</h3><p>{d}</p></li>')
     B.append('</ol>')
     closefig("Source: LTES Network (2025), Plan to Accelerate Solution: AI.")
 
@@ -197,7 +216,7 @@ HERO = f"""
         <span class="sep"></span>
         <span>7 minute read</span>
       </div>
-      <a class="scroll-cue" href="#main"><i></i>Read the argument</a>
+      <a class="scroll-cue" href="#main">{icon("bolt", "ic cue-ic")}Read the argument</a>
     </div>
   </div>
 </header>"""
@@ -304,7 +323,5 @@ page = f"""<!DOCTYPE html>
 </html>
 """
 
-OUT.mkdir(exist_ok=True)
-(OUT / "index.plain.html").write_text(page)
+(ROOT / "index.plain.html").write_text(page)
 print("built index.plain.html", len(page), "bytes")
-print("citations:", used, "-> ordered")
