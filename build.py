@@ -127,26 +127,20 @@ def fig_clusters():
 def fig_nigeria():
     reached, target, scale = 7.8, 17.5, 20.0
     openfig("f-nigeria", "People reached against the DARES target",
-            "Millions of people, one scale to 20 million.")
+            "Millions of people. The bar runs to the DARES target of 17.5 million.")
     f1 = round(reached / scale * 100, 2)
     f2 = round(target / scale * 100, 2)
     gap = round(f2 - f1, 2)
     B.append(f"""
-  <div class="lanes">
-    <div class="lane">
-      <div class="lane-h"><span>Reached, Nigeria Electrification Programme</span><b>7.8 m</b></div>
-      <div class="lane-track"><span class="lane-fill" style="--fill:{f1}%"></span></div>
-    </div>
-    <div class="lane">
-      <div class="lane-h"><span>Target, DARES</span><b>17.5 m</b></div>
-      <div class="lane-track"><span class="lane-fill" style="--fill:{f2}%"></span><span class="gap" style="--from:{f1}%;--gapw:{gap}%"><em>9.7 m gap</em></span></div>
+  <div class="stack">
+    <div class="stack-h"><span>Nigeria, people with new access to electricity</span><b>7.8 of 17.5 million</b></div>
+    <div class="stack-track">
+      <span class="seg seg-reached" style="width:{f1}%">7.8 m reached</span>
+      <span class="seg seg-gap" style="width:{gap}%">9.7 m still to reach</span>
     </div>
   </div>
   <div class="scale"><span>0</span><span>5</span><span>10</span><span>15</span><span>20 million</span></div>
-  <div class="legend">
-    <span><i class="sw-blue"></i>People reached</span>
-    <span><i class="sw-hatch"></i>Gap to the DARES target</span>
-  </div>""")
+""")
     closefig("Source: Rural Electrification Agency (2026).")
 
 def fig_leap():
