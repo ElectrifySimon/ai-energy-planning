@@ -270,8 +270,8 @@ p("IRENA also supported the <a href=\"https://cop31.tr/assets/docs/action-agenda
 endsec()
 
 sec("s5", "What Energy Planning Week adds")
-p("<a href=\"https://www.irena.org/Events/2026/Dec/Energy-Planning-Week-2026\" target=\"_blank\" rel=\"noopener\">Energy Planning Week 2026</a>, co-hosted with GET.transform in Bonn from 1 to 4 December, the first working gathering of the planning community after COP31. Sessions cover forecasting, scenarios and data quality.")
-p("The promise is narrower and more useful. AI gives a small team the coverage of a larger one, provided the institution keeps ownership of the model, the data and the decision.", "closing")
+p("<a href=\"https://www.irena.org/Events/2026/Dec/Energy-Planning-Week-2026\" target=\"_blank\" rel=\"noopener\">Energy Planning Week 2026</a>, co-hosted by IRENA and GET.transform in Bonn from 1 to 4 December 2026, is the first working gathering of the planning community after COP31. It brings together the teams behind these tools, with applications grouped around demand and load forecasting, scenario development, and data quality assurance. A session on AI for energy planning is built for adoption: a planner can see how a method performs on a real system, and that evidence feeds the <a href=\"https://climateaction.unfccc.int/assets/documents/121_.pdf\" target=\"_blank\" rel=\"noopener\">LTES Network</a>\u2019s 2026 to 2028 actions, which depend on countries willing to test new methods in live cases.")
+p("The promise of AI in energy planning is narrower than the publicity and more useful. It gives a small team the coverage of a larger one, provided the institution keeps ownership of the model, the data and the decision.", "closing")
 endsec()
 
 BODY = "\n".join(B)
