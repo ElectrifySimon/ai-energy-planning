@@ -82,13 +82,14 @@ def closefig(source):
 def rails(rows, maximum, unit, step, note, future_cls=" future"):
     B.append('<div class="rails">')
     for year, kind, v in rows:
+        v = float(v)
         fill = round(v / maximum * 100, 2)
         cls = future_cls if kind == "projected" else ""
         inside = ""
         B.append(f"""
   <div class="rail">
     <div class="rail-year">{year}<small>{kind}</small></div>
-    <div class="track" style="--fill:{fill}%"><span class="fill{cls}"></span><span class="rail-v{inside}" style="--fill:{fill}%">{v}<small>{unit}</small></span></div>
+    <div class="track" style="--fill:{fill}%"><span class="fill{cls}"></span><span class="rail-v{inside}" style="--fill:{fill}%">{v:g}<small>{unit}</small></span></div>
   </div>""")
     B.append("</div>")
     ticks = "".join(f"<span>{t}</span>" for t in step)
@@ -104,11 +105,15 @@ def fig_demand():
     closefig("Source: European Commission (2026).")
 
 def fig_solver():
-    openfig("f-solver", "Solver speed against the current release",
-            "Reported speed-up, current release at 1\u00d7.")
-    rails([("TZ-HiGHS", "prototype", 16), ("HiGHS", "current release", 1)], 16, "\u00d7",
+    openfig("f-solver", "Two places to save time in a planning study",
+            "Speed-up over today's process, which counts as 1\u00d7. The two gains sit at different steps and are not added together.")
+    B.append('<p class="rail-grp">Solve one scenario</p>')
+    rails([("TZ-HiGHS", "prototype", 16), ("HiGHS", "today", 1)], 16, "\u00d7",
           ["0", "4\u00d7", "8\u00d7", "12\u00d7", "16\u00d7"], None)
-    closefig("Source: TransitionZero (2026), Open Energy Benchmark. Vendor-reported, not an independent evaluation.")
+    B.append('<p class="rail-grp">Build the model file</p>')
+    rails([("MOSOX", "prototype", 6.5), ("GMPL tools", "today", 1)], 16, "\u00d7",
+          ["0", "4\u00d7", "8\u00d7", "12\u00d7", "16\u00d7"], None)
+    closefig("Source: TransitionZero (2026), Open Energy Benchmark; MOSOX (2026), Cambridge Open Engage. Reported by the developers, not independently evaluated.")
 
 def fig_clusters():
     items = [("01", "Monitoring", "eye"), ("02", "Forecasting", "forecast"),
@@ -248,7 +253,7 @@ fig_nigeria()
 p("Almost 80,000 people in 210 countries use <a href=\"https://leap.sei.org/\" target=\"_blank\" rel=\"noopener\">LEAP</a>, from the Stockholm Environment Institute. At least 65 countries have used it for climate pledges. The 2027 version adds AI that lets non-specialists explore a model in plain language.")
 fig_leap()
 p("<a href=\"https://www.transitionzero.org/events/introducing-conductor-and-tz-highs-launch-webinar\" target=\"_blank\" rel=\"noopener\">TransitionZero</a>, a non-profit, set AI agents on the solver underneath many energy models and reports a prototype up to 16 times faster than the current release. Solver time sets how many scenarios a ministry can test before a decision.")
-p("<a href=\"https://www.cambridge.org/engage/coe/article-details/6a563a3c4770e67d92e85a78\" target=\"_blank\" rel=\"noopener\">MOSOX</a>, an open-source compiler, makes the same case one step earlier. Built in Rust inside the Climate Compatible Growth programme with IRENA, the IAEA and the World Bank, it reads GMPL model files and writes the matrix a solver needs. On one large OSeMOSYS case, compilation ran 6.5 times faster, 130 seconds to 20. The syntax stays close to the mathematics, so an analyst can read, question and change it.")
+p("<a href=\"https://www.cambridge.org/engage/coe/article-details/6a563a3c4770e67d92e85a78\" target=\"_blank\" rel=\"noopener\">MOSOX</a> is a free, open-source compiler. A compiler turns a model file into the numbers a solver can read, and MOSOX does that step 6.5 times faster: 130 seconds down to 20 on one large OSeMOSYS model. It comes out of the Climate Compatible Growth programme, with IRENA, the IAEA and the World Bank taking part. Its syntax looks like the maths, so a person can check what the machine wrote.")
 fig_solver()
 p("One layer up, the assistant joins the workflow: draft a scenario, check inputs, explain a failed run, each edit accepted or rejected. Control follows expertise. A constrained assistant for general users, a local tool for modellers who keep their own AI and data locally.")
 endsec()

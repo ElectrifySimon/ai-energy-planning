@@ -383,3 +383,8 @@ figcaption span{color:var(--ink);font-weight:600;letter-spacing:.2em;margin-righ
 
 .seg-gap{background-image:none;background-color:#D5DBDF;border-left:1px solid #fff}
 .stack-h b{font-size:16px}
+
+/* solver figure: two grouped blocks */
+.rail-grp{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);
+  margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--rule-2)}
+.rail-grp:first-of-type{margin-top:8px}
